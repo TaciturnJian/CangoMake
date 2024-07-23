@@ -69,7 +69,7 @@ function(AddCXXModule)
 	set_target_properties(${module_fullname} PROPERTIES CXX_STANDARD ${ARG_CXX_STANDARD})
 	if (NOT "${ARG_LINKS}" STREQUAL "")
 		list(JOIN ARG_LINKS ";" module_links)
-		RequireLibraries(${module_links})
+		RequireLibraries(module_links)
 		target_link_libraries(${module_fullname} PUBLIC ${module_links})
 	endif()
 

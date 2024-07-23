@@ -25,8 +25,8 @@ endfunction(RequireLibrary)
 		对给定的每一个名称调用 RequireLibrary 检查库是否存在。
 	@param libraryList 库名称列表
 #]]
-macro (RequireLibraries libraryList)
-	foreach (library ${libraryList})
+macro (RequireLibraries libraryListName)
+	foreach (library ${${libraryListName}})
 		RequireLibrary(${library})
 	endforeach()
 endmacro()
