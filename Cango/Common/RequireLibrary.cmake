@@ -14,7 +14,7 @@ function(RequireLibrary libraryName)
 	endif()
 
 	if (TARGET ${libraryName})
-		set(${libraryName}_FOUND TRUE CACHE FORCE ON)
+		set(${libraryName}_FOUND TRUE CACHE BOOL)
 		return()
 	endif()
 	message(FATAL_ERROR "${PROJECT_NAME}> 缺少对象：${libraryName}")
