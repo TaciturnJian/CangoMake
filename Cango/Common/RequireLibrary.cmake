@@ -9,14 +9,17 @@ include_guard()
 	@param libraryName 库的名称
 #]]
 function(RequireLibrary libraryName)
-	if (${libraryName}_FOUND)
+	string(REPLACE "::" "_" library_name ${libraryName})
+	set(library_found ${library_name}_FOUND)
+	if (${library_found})
 		return()
 	endif()
 
 	if (TARGET ${libraryName})
-		set(${libraryName}_FOUND TRUE CACHE BOOL "Found library as traget")
+		set(${library_found} TRUE CACHE BOOL "Found library as traget")
 		return()
 	endif()
+	
 	message(FATAL_ERROR "${PROJECT_NAME}> 缺少对象：${libraryName}")
 endfunction(RequireLibrary)
 
