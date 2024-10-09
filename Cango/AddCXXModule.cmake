@@ -1,12 +1,42 @@
+#[[
+	<NAME>
+	|- <HEADER_DIR>
+	|	|- c++ header files(headers for library output: <NAMESPACE>_<NAME>. every "::" in namespace will be replaced by "_")
+	|
+	|- <SOURCE_DIR>
+	|	|- c++ source files(sources for library output)
+	|
+	|- <TESTER_DIR>
+	|	|- c++ executable files(every file has main function for executable output: <NAMESPACE>_<NAME>_<TESTER_FILENAME>)
+	|
+	|- CMakeLists.txt(
+	|	a simple cmakelists.txt would call these functions in order:
+	|		cmake_minimum_required(VERSION 3.28)
+	|		project(<NAMESPACE>.<NAME>)
+	|		Add_CXX_Module(
+	|			NAME <NAME>
+	|			NAMESPACE <NAMESPACE>
+	|			CXX_STANDARD <CXX_STANDARD> # default: 26
+	|			HEADER_DIR <HEADER_DIR>		# default: include
+	|			SOURCE_DIR <SOURCE_DIR>		# default: src
+	|			TESTER_DIR <TESTER_DIR>		# default: test
+	|			LINKS <LINKS>				# specify libraries to link, usually the targets in cmake like ${OpenCV_LIBS}, fmt::fmt etc.
+	|		)
+	|	)
+	|
+	|- ...
+]]#
+
 include_guard()
 
+# 输出日志，当上下文变量 ARG_QUIET 为真时不输出
 macro(Cango_AddCXXModule_Log log)
 	if (NOT ${ARG_QUIET})
 		message(STATUS ${log})
 	endif()
 endmacro()
 
-# 检查 NAME，缺少则报错
+# 检查 ARG_NAME，缺少则报错
 macro(Cango_AddCXXModule_GuardArgs_Name)
 	if ("${ARG_NAME}" STREQUAL "")
 		message(FATAL_ERROR "${PROJECT_NAME}> 缺少参数：NAME")
@@ -20,19 +50,19 @@ macro(Cango_AddCXXModule_GuardArgs_Namespace)
 	endif()
 endmacro()
 
-# 检查 SOURCE_DIR，缺少则警告，并设置为默认值 Sources
+# 检查 SOURCE_DIR，缺少则警告，并设置为默认值 src
 macro(Cango_AddCXXModule_GuardArgs_SourceDir)
 	if ("${ARG_SOURCE_DIR}" STREQUAL "")
-		Cango_AddCXXModule_Log("${PROJECT_NAME}> 缺少参数：SOURCE_DIR。将设置为 Sources")
-		set(ARG_SOURCE_DIR "Sources")
+		Cango_AddCXXModule_Log("${PROJECT_NAME}> 缺少参数：SOURCE_DIR。将设置为 src")
+		set(ARG_SOURCE_DIR "src")
 	endif()
 endmacro()
 
-# 检查 HEADER_DIR，缺少则警告，并设置为默认值 Headers
+# 检查 HEADER_DIR，缺少则警告，并设置为默认值 include
 macro(Cango_AddCXXModule_GuardArgs_HeaderDir)
 	if ("${ARG_HEADER_DIR}" STREQUAL "")
-		Cango_AddCXXModule_Log("${PROJECT_NAME}> 缺少参数：HEADER_DIR。将设置为 Headers")
-		set(ARG_HEADER_DIR "Headers")
+		Cango_AddCXXModule_Log("${PROJECT_NAME}> 缺少参数：HEADER_DIR。将设置为 include")
+		set(ARG_HEADER_DIR "include")
 	endif()
 endmacro()
 
@@ -47,11 +77,11 @@ macro(Cango_AddCXXModule_GuardArgs_CXXStandard)
 	endif()
 endmacro()
 
-# 检查 TESTER_DIR，缺少则警告，并设置为默认值 Testers
+# 检查 TESTER_DIR，缺少则警告，并设置为默认值 test
 macro(Cango_AddCXXModule_GuardArgs_TesterDir)
 	if ("${ARG_TESTER_DIR}" STREQUAL "")
-		Cango_AddCXXModule_Log("${PROJECT_NAME}> 缺少参数：TESTER_DIR。将设置为 Testers")
-		set(ARG_TESTER_DIR "Testers")
+		Cango_AddCXXModule_Log("${PROJECT_NAME}> 缺少参数：TESTER_DIR。将设置为 test")
+		set(ARG_TESTER_DIR "test")
 	endif()
 endmacro()
 
@@ -59,8 +89,8 @@ endmacro()
 macro(Cango_AddCXXModule_GuardArgs)
 	Cango_AddCXXModule_GuardArgs_Name()
 	Cango_AddCXXModule_GuardArgs_Namespace()
-	Cango_AddCXXModule_GuardArgs_SourceDir()
 	Cango_AddCXXModule_GuardArgs_HeaderDir()
+	Cango_AddCXXModule_GuardArgs_SourceDir()
 	Cango_AddCXXModule_GuardArgs_CXXStandard()
 	Cango_AddCXXModule_GuardArgs_TesterDir()
 endmacro()
