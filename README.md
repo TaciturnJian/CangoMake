@@ -1,0 +1,3 @@
+# cango.cmake
+
+TODO docs
